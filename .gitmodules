@@ -1,0 +1,7 @@
+[submodule "api"]
+	path = api
+	url = https://git.snet.tu-berlin.de/blockchain/dims/api.git
+	branch = v1.x
+[submodule "demo-mongo-backend"]
+	path = demo-mongo-backend
+	url = https://git.snet.tu-berlin.de/blockchain/dims/demo-mongo-backend.git

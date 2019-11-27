@@ -1,0 +1,129 @@
+version: '3'
+
+networks:
+  dims-net:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: ${IDC_API_SUBNET-172.16.0.0/24}
+
+services:
+  pool:
+    build:
+      context: ./test-pool
+    image: dims/test-pool
+    container_name: dims-pool
+    ports:
+      - ${IDC_POOL_PORTS-9701-9708}:${IDC_POOL_PORTS-9701-9708}
+      - ${IDC_POOL_INFO_PORT-8001}:${IDC_POOL_INFO_PORT-8001}
+    environment:
+      - IDC_POOL_NAME=${IDC_POOL_NAME-testPool}
+      - IDC_POOL_IP=${IDC_POOL_IP-127.0.0.1}
+      - IDC_PORT_START=${IDC_PORT_START-9700}
+    network_mode: bridge
+
+  mongodb:
+    image: mongo:4
+    container_name: dims-db
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${IDC_API_DB_USER}
+      - MONGO_INITDB_ROOT_PASSWORD=${IDC_API_DB_PASSWORD}
+    networks:
+      - dims-net
+
+  schema:
+    image: idchain/schema-extensions:1.0
+    container_name: schema-compiler
+    environment:
+      - IDC_SCHEMA_IP=${IDC_SCHEMA_IP-172.16.0.150}
+      - IDC_SCHEMA_PORT=${IDC_SCHEMA_PORT-9000}
+    networks:
+      dims-net:
+        ipv4_address: ${IDC_SCHEMA_IP-172.16.0.150}
+
+  api:
+    build:
+      context: ./api
+    image: dims/iea-api
+    container_name: dims-api
+    environment:
+      - RUST_LOG=${RUST_LOG-debug}
+      - IDC_API_LOG_LEVEL=${IDC_API_LOG_LEVEL-debug}
+      - IDC_API_HOST=${IDC_API_HOST-172.16.0.100}
+      - IDC_API_PORT=${IDC_API_PORT-8000}
+      - IDC_API_DOMAIN_PROTOCOL=${IDC_API_DOMAIN_PROTOCOL-http}
+      - IDC_API_DOMAIN_HOST=${IDC_API_DOMAIN_HOST-172.16.0.100}
+      - IDC_API_DOMAIN_PORT=${IDC_API_DOMAIN_PORT-8000}
+      - IDC_API_NYM_ALWAYS=${IDC_API_NYM_ALWAYS-false}
+      - IDC_API_JWT_SECRET=${IDC_API_JWT_SECRET-changeme}
+      - IDC_API_DB_HOST=${IDC_API_DB_HOST-mongodb}
+      - IDC_API_DB_PORT=${IDC_API_DB_PORT-27017}
+      - IDC_API_DB_USER
+      - IDC_API_DB_PASSWORD
+      - IDC_API_SALTROUNDS=${IDC_API_SALTROUNDS-10}
+      - IDC_API_GENESIS_TXN=${IDC_API_GENESIS_TXN-./pool_transactions_genesis}
+      - IDC_POOL_IP=${IDC_POOL_IP-172.16.0.200}
+      - IDC_POOL_NAME=${IDC_POOL_NAME-testPool}
+      - IDC_POOL_INFO_PORT=${IDC_POOL_INFO_PORT-8001}
+      - IDC_SCHEMA_IP=${IDC_SCHEMA_IP-172.16.0.150}
+      - IDC_SCHEMA_PORT=${IDC_SCHEMA_PORT-9000}
+    ports:
+      - ${IDC_API_PORT-8000}:${IDC_API_PORT-8000}
+    depends_on:
+      - pool
+      - mongodb
+      - schema
+    networks:
+      dims-net:
+        ipv4_address: ${IDC_API_HOST-172.16.0.100}
+
+  demomongobackend:
+    build:
+      context: ./demo-mongo-backend
+    image: dims/demo-mongo-backend
+    container_name: dims-demo-mongo-backend
+    environment:
+      - DEMO_BACKEND_HOST=${DEMO_BACKEND_HOST-0.0.0.0}
+      - DEMO_BACKEND_PORT=${DEMO_BACKEND_PORT-8011}
+      - IDC_API_DB_HOST=${IDC_API_DB_HOST-mongodb}
+      - IDC_API_DB_PORT=${IDC_API_DB_PORT-27017}
+      - IDC_API_DB_USER
+      - IDC_API_DB_PASSWORD
+      - IDC_API_JWT_SECRET=${IDC_API_JWT_SECRET-changeme}
+    ports:
+      - ${DEMO_BACKEND_PORT-8011}:${DEMO_BACKEND_PORT-8011}
+    depends_on:
+      - mongodb
+    networks:
+      - dims-net
+
+  cloudagent:
+    image: idchain/cloud-agent:1.0
+    container_name: dims-cloud-agent
+    environment:
+      - IDC_CA_APP_HOST
+      - IDC_CA_APP_PORT=${IDC_CA_APP_PORT-8005}
+      - IDC_CA_DOMAIN_HOST
+      - IDC_CA_DOMAIN_PORT
+      - IDC_CA_DB_PATH=${IDC_CA_DB_PATH-'./data'}
+      - IDC_CA_WALLET_NAME=${IDC_CA_DB_PATH-caWallet}
+      - IDC_CA_SECRET=${IDC_CA_SECRET-changeMe}
+      - IDC_CA_FIREBASE_PROJECT_URL
+      - IDC_CA_FIREBASE_ADMIN_SDK_FILE_HOST_PATH
+      - IDC_POOL_IP
+      - IDC_POOL_INFO_PORT
+      - IDC_POOL_NAME
+      - IDC_CA_GENESIS_TXN
+      - IDC_CA_SSL
+      - IDC_CA_LOG_LEVEL
+      - RUST_LOG
+    depends_on:
+      - pool
+    volumes:
+      - ${IDC_CA_FIREBASE_ADMIN_SDK_FILE_HOST_PATH}:/home/indy/app/config:ro
+    ports:
+      - ${IDC_CA_APP_PORT-8005}:${IDC_CA_APP_PORT-8005}
+    networks:
+      - dims-net
+
