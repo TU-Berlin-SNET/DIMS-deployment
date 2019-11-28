@@ -144,3 +144,32 @@ services:
     networks:
       - dims-net
 
+  openidssilogin:
+    build:
+      context: ./openid-ssi_login
+    image: dims/openidssilogin
+    container_name: dims-openidssilogin
+    environment:
+      - IDC_API_DOMAIN_PROTOCOL
+      - IDC_API_DOMAIN_HOST
+      - IDC_API_DOMAIN_PORT
+      - DIMS_OIDC_PROVIDER_CONFIG_PATH=./config/config.json
+      - DIMS_OIDC_PROVIDER_PORT
+      - DIMS_OIDC_PROVIDER_URL
+      - DIMS_OIDC_PROVIDER_SECURE_KEY
+      - DIMS_OIDC_PROVIDER_API_POLL_INTERVAL
+      - DIMS_OIDC_PROVIDER_API_USER
+      - DIMS_OIDC_PROVIDER_API_PASS
+      - DIMS_OIDC_PROVIDER_API_WALLET_NAME
+      - DIMS_OIDC_PROVIDER_API_WALLET_KEY
+      - DIMS_OIDC_PROVIDER_API_WALLET_SEED
+      - NODE_ENV=development
+    depends_on:
+      - api
+    volumes:
+      - ./oidc-config:/app/config
+    ports:
+      - ${DIMS_OIDC_PROVIDER_PORT-3001}:${DIMS_OIDC_PROVIDER_PORT-3001}
+    networks:
+      - dims-net
+

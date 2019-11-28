@@ -238,3 +238,13 @@ IDC_CA_GENESIS_TXN=./pool_transactions_genesis
 DIMS_DEMO_MONGO_URL=
 
 
+## ------------------------------------------------------------------------------------
+## DIMS_OIDC_PROVIDER_CONFIG_PATH
+##
+## Path the oidc-provider (openid-ssi-login) will look for config.json
+## ↓↓↓↓-------------------------------------------------------------------------------
+#
+
+DIMS_OIDC_PROVIDER_CONFIG_PATH=./example-config.json
+
+

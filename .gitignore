@@ -1,7 +1,5 @@
 data/
-.env*
 pool_transactions_genesis*
-ca-config/
 # Created by https://www.gitignore.io/api/vim,node,linux,emacs,macos,jetbrains,visualstudiocode
 
 ### Emacs ###
