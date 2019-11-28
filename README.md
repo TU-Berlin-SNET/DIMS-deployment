@@ -2,6 +2,8 @@
 
 Deployment configuration for all components
 
+### Warning: This repository contains credentials such as ca-config/firebase-admini-sdk.json for firebase and may contain other sensitive information. Scrub the history and remove those files as well as any other kind of sensitive data before publishing.
+
 ## Preparation
 
 - Install Docker and Docker-Compose
