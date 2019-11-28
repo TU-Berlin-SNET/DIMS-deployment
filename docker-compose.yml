@@ -102,7 +102,7 @@ services:
     build:
       context: ./cloudagent
     image: dims/cloud-agent
-    container_name: dims-cloud-agent
+    container_name: dims-cloudagent
     environment:
       - IDC_CA_APP_HOST
       - IDC_CA_APP_PORT=${IDC_CA_APP_PORT-8005}
