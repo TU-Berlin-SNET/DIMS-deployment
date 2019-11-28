@@ -99,7 +99,9 @@ services:
       - dims-net
 
   cloudagent:
-    image: idchain/cloud-agent:1.0
+    build:
+      context: ./cloudagent
+    image: dims/cloud-agent
     container_name: dims-cloud-agent
     environment:
       - IDC_CA_APP_HOST
@@ -108,6 +110,7 @@ services:
       - IDC_CA_DOMAIN_PORT
       - IDC_CA_DB_PATH=${IDC_CA_DB_PATH-'./data'}
       - IDC_CA_WALLET_NAME=${IDC_CA_DB_PATH-caWallet}
+      - IDC_CA_SEED
       - IDC_CA_SECRET=${IDC_CA_SECRET-changeMe}
       - IDC_CA_FIREBASE_PROJECT_URL
       - IDC_CA_FIREBASE_ADMIN_SDK_FILE_HOST_PATH
