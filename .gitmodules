@@ -8,3 +8,7 @@
 [submodule "cloudagent"]
 	path = cloudagent
 	url = https://git.snet.tu-berlin.de/blockchain/dims/cloudagent.git
+[submodule "issuer-app"]
+	path = issuer-app
+	url = https://git.snet.tu-berlin.de/blockchain/dims/issuer-app.git
+	branch = dev

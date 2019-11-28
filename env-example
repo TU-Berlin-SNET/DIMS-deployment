@@ -227,3 +227,14 @@ IDC_CA_DB_PATH='./data'
 
 IDC_CA_GENESIS_TXN=./pool_transactions_genesis
 
+
+## ------------------------------------------------------------------------------------
+## DEMO_MONGO_URL
+##
+## Will be used by the Issuer App to connect with the Demo Mongo Backend
+## ↓↓↓↓-------------------------------------------------------------------------------
+#
+
+DIMS_DEMO_MONGO_URL=
+
+

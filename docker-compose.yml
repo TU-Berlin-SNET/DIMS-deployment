@@ -130,3 +130,17 @@ services:
     networks:
       - dims-net
 
+  issuerapp:
+    build:
+      context: ./issuer-app
+    image: dims/issuer-app
+    container_name: dims-issuerapp
+    environment:
+      - IDC_API_DOMAIN_PROTOCOL=${IDC_API_DOMAIN_PROTOCOL-http}
+      - IDC_API_DOMAIN_HOST=${IDC_API_DOMAIN_HOST-172.16.0.100}
+      - IDC_API_DOMAIN_PORT=${IDC_API_DOMAIN_PORT-8000}
+    ports:
+      - 3000:3000
+    networks:
+      - dims-net
+
