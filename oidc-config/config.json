@@ -12,6 +12,18 @@
     }
   ],
 
+  "SUPPORTED_SCOPES": {
+    "openid": ["sub"],
+    "email": ["email", "email_verified"],
+    "address": ["address"],
+    "phone": ["phone_number", "phone_number_verified"],
+    "profile": ["birthdate", "family_name", "gender", "given_name", "locale", "middle_name", "name",
+      "nickname", "picture", "preferred_username", "profile", "updated_at", "website", "zoneinfo"]
+  },
+
+  "CLIENT_ATTRIBUTE_RESTRICTIONS": {
+  },
+
   "PORT": 3001,
 
   "OIDC_URL": "http://"REPLACE":3001",
