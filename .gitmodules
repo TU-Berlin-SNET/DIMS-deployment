@@ -15,4 +15,3 @@
 [submodule "openid-ssi_login"]
 	path = openid-ssi_login
 	url = https://git.snet.tu-berlin.de/blockchain/dims/openid-ssi_login.git
-	branch = develop
