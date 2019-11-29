@@ -34,7 +34,7 @@ sudo docker-compose up -d
 
 ## Troubleshooting
 
-### API or CloudAgent: `PoolLedgerTimeout`
+### `PoolLedgerTimeout` (or pool connection issues in general)
 
 This happens sometimes when the pool was not quite ready on startup, try restarting the service, e.g.:
 ```shell
